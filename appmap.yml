@@ -1,3 +1,0 @@
-name: spring-petclinic
-packages:
-- path: org.springframework.samples.petclinic
