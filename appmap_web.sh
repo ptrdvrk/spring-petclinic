@@ -8,7 +8,7 @@ JVM_PID=$!
 
 export WS_URL="http://localhost:8080"
 export OUTPUT_DIR="$1"
-export APPMAP_FILE_PREFIX=".appmap.json"
+export APPMAP_FILE_SUFFIX=".appmap.json"
 
 mkdir -p $OUTPUT_DIR
 
@@ -35,7 +35,7 @@ start_recording() {
 
 stop_recording() {
     output=$(_curl -sXDELETE ${WS_URL}/_appmap/record)
-    [ "$#" -eq "1" ] && echo $output > $OUTPUT_DIR/${@}$APPMAP_FILE_PREFIX
+    [ "$#" -eq "1" ] && echo $output > $OUTPUT_DIR/${@}$APPMAP_FILE_SUFFIX
 }
 
 record_maps(){
