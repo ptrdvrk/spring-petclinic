@@ -38,6 +38,7 @@ stop_recording() {
     [ "$#" -eq "1" ] && echo $output > $OUTPUT_DIR/${@}$APPMAP_FILE_SUFFIX
 }
 
+# using different resource ids for all http requests to avoid hibernate's first-level caching and capture as many events as possible.
 record_maps(){
 
     start_recording
