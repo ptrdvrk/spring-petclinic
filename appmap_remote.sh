@@ -36,7 +36,10 @@ start_recording() {
 
 stop_recording() {
     output=$(_curl -sXDELETE ${WS_URL}/_appmap/record)
-    [ ! "$#" -eq "1" ] && exit 1
+    if [[ ! "$#" -eq "1" ]]; then
+        echo "Wrong number of arguments, $# ($@)"
+        exit 1
+    fi
     scenario=${1//_/ }
     output=$(jq -c --arg scenario "$scenario"  '.metadata["name"] = $scenario' <<< $output)
     echo $output > $OUTPUT_DIR/${@}$APPMAP_FILE_SUFFIX
