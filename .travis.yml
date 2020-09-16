@@ -1,2 +1,9 @@
-language: java
-jdk: oraclejdk8
+version: ~> 1.0
+
+jdk:
+- openjdk8
+import: land-of-apps/land-of-apps:travis/java-imports.yml
+
+script:
+- mvn -DargLine="-javaagent:appmap.jar -Dappmap.debug -Dappmap.config.file=./appmap.yml -Dappmap.output.directory=./tmp/appmap" test
+- ./appmap_remote.sh ./tmp/appmap
