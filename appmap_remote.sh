@@ -16,7 +16,7 @@ export spring_profiles_active=mysql
 LOG=petclinic.log
 
 
-java -ea -Dappmap.output.directory=./tmp/appmap -javaagent:appmap.jar -P=$DATABASE -jar target/spring-petclinic*.jar &> $LOG &
+java -ea -Dappmap.output.directory=./tmp/appmap -javaagent:appmap.jar -jar target/spring-petclinic*.jar &> $LOG &
 
 JVM_PID=$!
 
