@@ -1,9 +1,23 @@
 #!/bin/bash
 
+if [[ ! "$#" -eq "1" ]]; then
+        echo "Wrong number of arguments, one argument for output directory is required: $# ($@)"
+        exit 1
+fi
+
 set -x
 
+# make a copy of appmap.jar in the root folder of the project
+mvn dependency:copy
+
+# let's use a MySQL DB when performing remote recording of AppMaps
+DATABSE=MySQL
+export spring_profiles_active=mysql
 LOG=petclinic.log
-java -ea -Dappmap.debug -javaagent:appmap.jar -jar target/spring-petclinic*.jar &> $LOG &
+
+
+java -ea -Dappmap.output.directory=./tmp/appmap -javaagent:appmap.jar -P=$DATABASE -jar target/spring-petclinic*.jar &> $LOG &
+
 JVM_PID=$!
 
 export WS_URL="http://localhost:8080"

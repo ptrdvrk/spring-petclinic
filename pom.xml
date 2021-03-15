@@ -135,6 +135,45 @@
 
   <build>
     <plugins>
+
+      <!-- get a copy of appmap agent for remote recording-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>com.appland</groupId>
+              <artifactId>appmap-agent</artifactId>
+              <version>LATEST</version>
+              <type>jar</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>.</outputDirectory>
+              <destFileName>appmap.jar</destFileName>
+            </artifactItem>
+          </artifactItems>
+        </configuration>
+      </plugin>
+
+
+      <!-- AppMap agent -->
+      <plugin>
+          <groupId>com.appland</groupId>
+          <artifactId>appmap-maven-plugin</artifactId>
+          <configuration>
+            <configFile>appmap.yml</configFile>
+            <outputDirectory>tmp/appmap</outputDirectory>
+          </configuration>
+          <executions>
+              <execution>
+                  <phase>process-test-classes</phase>                  
+                  <goals>
+                      <goal>prepare-agent</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+
       <plugin>
         <groupId>io.spring.javaformat</groupId>
         <artifactId>spring-javaformat-maven-plugin</artifactId>
