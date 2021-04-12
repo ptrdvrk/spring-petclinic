@@ -1,0 +1,62 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Setup AppMap",
+  "steps": [
+    {
+      "title": "Setting up AppMaps for Java projects",
+      "description": "This Tour explains how to set up AppMap recording and sharing for Java applications. Follow this narrated example to see how to quickly set up your projects for AppMap use."
+    },
+    {
+      "directory": ".appmap",
+      "description": "We have added the `.appmap` folder to the current project:\n - to store recorded AppMaps for this branch and PR\n - as the location for the `appmap.yml` configuration for this branch and PR",
+      "line": null,
+      "title": "Add .appmap folder"
+    },
+    {
+      "file": ".appmap/appmap.yml",
+      "selection": {
+        "start": {
+          "line": 1,
+          "character": 1
+        },
+        "end": {
+          "line": 3,
+          "character": 48
+        }
+      },
+      "description": "We have added an `appmap.yml` file to the `.appmap` folder and configured it for recording AppMaps for our project:\n```yaml\nname: Spring-framework/PetClinic\npackages:\n  - path: org.springframework.samples.petclinic\n```\n\n- name: org/app name\n- package: list of Java packages, classes and methods to be included and excluded. See the [AppMap documentation](https://github.com/applandinc/appmap-java#configuration).",
+      "title": "Create appmap.yml"
+    },
+    {
+      "file": "pom.xml",
+      "description": "We have added the AppMap maven plugin to `pom.xml`. The plugin automatically records AppMaps when the tests are run. View the [AppMap plugin documentation](https://github.com/applandinc/appmap-maven-plugin#plugin-configuration)\n```xml\n      <!-- AppMap Java agent, all parameters -->\n      <plugin>\n          <groupId>com.appland</groupId>\n          <artifactId>appmap-maven-plugin</artifactId>\n          <configuration>\n              <configFile>.appmap/appmap.yml</configFile>\n              <outputDirectory>.appmap/appmap</outputDirectory>\n              <skip>false</skip>\n              <debug>true</debug>\n              <debugFile>.appmap/appmap/agent.log</debugFile>\n              <eventValueSize>1024</eventValueSize>\n          </configuration>\n          <executions>\n              <execution>\n                  <phase>process-test-classes</phase>\n                  <goals>\n                      <goal>prepare-agent</goal>\n                  </goals>\n              </execution>\n          </executions>\n      </plugin>\n      <!-- end AppMap Java agent -->\n```",
+      "line": 159,
+      "selection": {
+        "start": {
+          "line": 138,
+          "character": 1
+        },
+        "end": {
+          "line": 159,
+          "character": 37
+        }
+      },
+      "title": "Add AppMap plugin to pom.xml"
+    },
+    {
+      "title": "Run tests to record AppMaps",
+      "description": "When you run tests, AppMap will be recorded in `.appmap/appmap`\n\n- macOS / linux:\n>> ./mvnw clean test\n- Windows\n>> mvnw clean test\n"
+    },
+    {
+      "directory": ".appmap/appmap",
+      "description": "Now open the recorded AppMaps in `./appmap/appmap`.\n\nYou can search by test names in their filenames. Press `CTRL|COMMAND + P` then type FindVets and open the file.",
+      "title": "Open AppMaps"
+    },
+    {
+      "title": "Add AppMaps to the git project",
+      "description": "We recommend to store the AppMap configuration and recorded AppMap files in git for collaboration and future reference. Because AppMap files can be large for complex tests or manual recordings, we recommend to use the `git lfs` [https://github.com/git-lfs/git-lfs](https://github.com/git-lfs/git-lfs) for storage of AppMaps in git repositories. These steps were performed to store AppMap in this project:\n\n### Setup the lfs client\n1. `git lfs`[Installation instructions](https://git-lfs.github.com/)\n2. setup git lfs for your user account\n>> git lfs install\n3. track .appmap.json AppMap files in git lfs\n>> git lfs track \"*.appmap.json\"\n4. Now make sure .gitattributes is tracked:\n>> git add .gitattributes\n\n### Add AppMap resources to the repo\n1. Add AppMap configuration and recorded AppMaps to the repo\n>> git add .appmap/appmap.yml .appmap/appmap/*\n2. Commit changes\n>> git commit -m \"chore: adding AppMaps\"\n3. Follow your usual git routine to push changes to the origin when ready\n>> git push"
+    }
+  ],
+  "ref": "optimize_jpa",
+  "isPrimary": true
+}
