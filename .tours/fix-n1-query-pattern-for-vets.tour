@@ -1,0 +1,52 @@
+{
+  "$schema": "https://aka.ms/codetour-schema",
+  "title": "Fix N+1 query pattern for Vets",
+  "steps": [
+    {
+      "title": "Introduction",
+      "description": "## Vets SQL query fix\n**Problem:** the current code for retrieving Vets from the DB suffers from the N+1 problem - for each fetched Vet record, a query retrieving its specialties is executed, resulting in N+1 trips to the database.\n\n**Fix:** update of the Vet repository to use an EntityGraph that fetches specialties together with Vet records using a single SQL select with a join.\n"
+    },
+    {
+      "directory": ".appmap/appmap",
+      "description": "## Observe the problem in AppMap\n\nThe repetitive queries can be observed in a recorded AppMap for the `shouldFindVets` test. \n\n- search for an open the `org_...._shouldFindVets.before.appmap.json` file in this folder (.appmap/appmap)\n\n- open the Trace and observe the SQL selects\n- return to this Tour to see the code changes"
+    },
+    {
+      "file": "src/main/java/org/springframework/samples/petclinic/vet/VetRepository.java",
+      "description": "## Fixing the JPA-generated queries with EntityGraph\n\nAdding this `EntityGraph` label will instruct the JPA to fetch Vet records and specialties in a single `SELECT` query with a `JOIN` instead of the default N+1 queries.\n\n```java\n@EntityGraph(type = EntityGraph.EntityGraphType.FETCH, attributePaths = { \"specialties\" })\n```\n\nSee the new SQL query pattern in the next step.",
+      "line": 45,
+      "selection": {
+        "start": {
+          "line": 45,
+          "character": 2
+        },
+        "end": {
+          "line": 45,
+          "character": 92
+        }
+      }
+    },
+    {
+      "directory": ".appmap/appmap",
+      "description": "## See updated SQL sequence\n\nOpen the `org_...shouldFindVets.appmap.json` file to see the updated SQL queries.\n"
+    },
+    {
+      "file": "src/test/java/org/springframework/samples/petclinic/service/ClinicServiceTests.java",
+      "selection": {
+        "start": {
+          "line": 191,
+          "character": 1
+        },
+        "end": {
+          "line": 201,
+          "character": 1
+        }
+      },
+      "description": "## Tests\n\nThe existing test covers the updated code without modifications."
+    },
+    {
+      "title": "Conclusion",
+      "description": "## Conclusion\nBefore:\n- Fetching vets from DB resulted in N+1 queries\n\nAfter:\n- Fetching vets from DB results in 1 query\n\nFix:\n- Adding EntityGraph to VetRepository\n\nTests:\n- Passing, no additional tests needed"
+    }
+  ],
+  "ref": "optimize_jpa"
+}
